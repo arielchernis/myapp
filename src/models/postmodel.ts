@@ -1,7 +1,7 @@
-const mongoose =require('mongoose')
+import mongoose from 'mongoose'
 
 const postSchema = new mongoose.Schema({
-    message:{
+    message: {
         type: String,
         required: true
     },
@@ -10,4 +10,4 @@ const postSchema = new mongoose.Schema({
         required: true
     }
 })
-module.exports = mongoose.model('Post',postSchema)
+export = mongoose.model('Post', postSchema)
