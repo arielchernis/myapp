@@ -1,12 +1,12 @@
 const express = require('express')
+const Post = require("../controllers/post");
 const router = express.Router()
 
-router.get('/',(req, res) => {
-    res.send('Hello api')
-})
 
-router.post('/post',(req, res) => {
-    res.send('IM POSTING!!!!')
-})
+router.get('/', Post.getAllPosts)
+
+router.post('/', Post.createNewPost)
+
+router.get('/:id', Post.getPostByid)
 
 module.exports = router

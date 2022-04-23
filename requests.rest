@@ -1,0 +1,23 @@
+###
+
+GET http://localhost:3000/post
+
+###
+
+GET http://localhost:3000/post/625ec976ca0596c9a491d24e
+
+###
+
+
+GET http://localhost:3000/post?sender=dori
+
+###
+
+POST http://localhost:3000/post
+Content-Type: application/json
+
+{
+  "message": "hi",
+  "sender": "dori"
+}
+

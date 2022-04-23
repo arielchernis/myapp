@@ -1,12 +1,8 @@
-const express = require('express')
-const app = express();
-const dotenv = require("dotenv").config()
+const app = require('./server')
 const port = process.env.port
-const indexRouter = require('./routes/post_routes')
-
-app.use('/',indexRouter)
 
 
 app.listen(port, () => {
-console.log('app is running on port ' + port)
+    console.log('app is running on port ' + port)
 });
+
