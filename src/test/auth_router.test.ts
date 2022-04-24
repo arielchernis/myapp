@@ -1,16 +1,16 @@
 import request from 'supertest'
 import app from '../server'
 import mongoose from 'mongoose'
+import User from "../models/user_model";
 
 
 beforeAll(async () => {
 
 })
 
-afterAll((done) => {
-    mongoose.connection.close()
-
-    done()
+afterAll(async () => {
+    await User.deleteMany({email: email});
+    mongoose.connection.close();
 })
 const email = "test@test.com"
 const bademail = "test@bad.com"
@@ -19,7 +19,7 @@ const badpassword = "xxxx"
 describe("Auth API test", () => {
 
     test("test register api", async () => {
-        const response = await request(app).post("/auth/register")
+        let response = await request(app).post("/auth/register")
             .send({
                 "email": email,
                 "password": password
@@ -47,7 +47,7 @@ describe("Auth API test", () => {
     })
     test("test wrong email api", async () => {
         const response = await request(app)
-            .post("/auth/register")
+            .post("/auth/login")
             .send({
                 'email': bademail,
                 'password': password
@@ -56,7 +56,7 @@ describe("Auth API test", () => {
     })
     test("test wrong password api", async () => {
         const response = await request(app)
-            .post("/auth/register")
+            .post("/auth/login")
             .send({
                 'email': email,
                 'password': badpassword

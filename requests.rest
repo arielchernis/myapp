@@ -28,8 +28,21 @@ DELETE http://localhost:3000/post/62640ecc09ad88b729937fb9
 ###
 
 POST http://localhost:3000/auth/register
+content-Type: application/json
+
+{
+  "email": "savyon@hello.com",
+  "password": "1234"
+}
+
 
 ###
 POST http://localhost:3000/auth/login
+content-Type: application/json
+
+{
+  "email": "dori@hello.com",
+  "password": "1234"
+}
 
 ###
