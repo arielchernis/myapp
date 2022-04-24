@@ -5,7 +5,7 @@ const getAllPosts = async (req, res) => {
     console.log('getAllPosts')
     try {
         const sender = req.query.sender
-        var posts
+        let posts;
         if (sender != null || sender != undefined) {
             posts = await Post.find({'sender': sender})
         } else {

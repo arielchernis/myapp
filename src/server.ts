@@ -25,4 +25,8 @@ app.use(bodyparser.json())
 
 app.use('/post', post_routes)
 
+import auth_rotes from './routes/auth_routes'
+
+app.use('/auth', auth_rotes)
+
 export = app
