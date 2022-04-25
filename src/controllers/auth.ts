@@ -93,7 +93,50 @@ const login = async (req: Request, res: Response) => {
         return res.status(400).send({error: err.message});
     }
 };
+const renewToken = async (req: Request, res: Response) => {
+    console.log("renewToken");
+    // validate refresh token
+    let token = req.headers["authorization"];
+    if (token == undefined || token == null) {
+        return res.sendStatus(400);
+    }
+    token = token.split(" ")[1];
+
+    jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, userId) => {
+        console.log("jwt.verify");
+        if (err != null) {
+            return res.status(400).send({err: err.message})
+        }
+        try {
+            const id: string = userId['_id']
+            const user2 = await User.findById(id);
+            if (user2.refreshToken != token) {
+                user2.refreshToken = "";
+                await user2.save();
+                console.log("refresh token not valid - not present in DB")
+                return res.status(400).send({error: err.message});
+            }
+
+            const [accessToken, refreshToken] = generateTokens(id)
+            user2.refreshToken = refreshToken;
+            await user2.save();
+            console.log("StatusCodes.OK");
+            res.status(StatusCodes.OK).send({
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                _id: id,
+            });
+        } catch (err) {
+            return res.status(400).send({error: err.message});
+        }
+    });
+};
+const test = async (req, res) => {
+    res.status(200).send({})
+}
 export = {
     register,
-    login
+    login,
+    renewToken,
+    test
 }

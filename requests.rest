@@ -17,8 +17,8 @@ POST http://localhost:3000/post
 Content-Type: application/json
 
 {
-  "message": "bye",
-  "sender": "dori"
+  "message": "Prepare to die",
+  "sender": "inigo montoya"
 }
 
 ###
