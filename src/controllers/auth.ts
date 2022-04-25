@@ -120,8 +120,8 @@ const renewToken = async (req: Request, res: Response) => {
             const [accessToken, refreshToken] = generateTokens(id)
             user2.refreshToken = refreshToken;
             await user2.save();
-            console.log("StatusCodes.OK");
-            res.status(StatusCodes.OK).send({
+            console.log("StatusCodes 200");
+            res.status(200).send({
                 access_token: accessToken,
                 refresh_token: refreshToken,
                 _id: id,
