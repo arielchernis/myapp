@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "tsc && jest --detectOpenHandles --forceExit --coverage --silent",
+    "test": "tsc && jest  --silent --runInBand",
     "devstart": "nodemon ./src/app.ts",
     "lint": "eslint. --ext .ts",
     "start": "tsc && node dist/app.js"
@@ -31,6 +31,9 @@
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "supertest": "^6.2.2",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.3.0",
+    "ts-jest": "^28.0.2",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   }
