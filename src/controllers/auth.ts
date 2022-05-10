@@ -1,5 +1,4 @@
 import {Request, Response} from "express"
-import {StatusCodes} from 'http-status-code'
 import User from '../models/user_model'
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken";

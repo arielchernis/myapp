@@ -1,33 +1,36 @@
-import express from 'express'
+import express from "express";
 
 const app = express();
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 
-dotenv.config()
-import post_routes from './routes/post_routes'
-import mongoose from 'mongoose';
+dotenv.config();
 
-mongoose.connect(process.env.DB_URL)
+console.log("server is starting..");
 
-const db = mongoose.connection
-db.on('error', (error) => {
-    console.error(error)
-})
-db.once('open', () => {
-    console.log('Connected to mongoDB')
-})
+import mongoose from "mongoose";
 
-import bodyparser from 'body-parser'
+mongoose.connect(process.env.DB_URL);
 
-app.use(bodyparser.urlencoded({extended: true, limit: '1mb'}))
-app.use(bodyparser.json())
+const db = mongoose.connection;
+db.on("error", (error) => {
+    console.error(error);
+});
+db.once("open", () => {
+    console.log("connected to mongo");
+});
 
+import bodyparser from "body-parser";
 
-app.use('/post', post_routes)
+app.use(bodyparser.urlencoded({extended: true, limit: "1mb"}));
+app.use(bodyparser.json());
 
-import auth_rotes from './routes/auth_routes'
+import post_routes from "./routes/post_routes";
 
-app.use('/auth', auth_rotes)
+app.use("/post", post_routes);
+
+import auth_routes from "./routes/auth_routes";
+
+app.use("/auth", auth_routes);
 
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
@@ -37,7 +40,7 @@ if (process.env.NODE_ENV == "development") {
         definition: {
             openapi: "3.0.0",
             info: {
-                title: "Mine simple REST backend API",
+                title: "SCE 20222 simple REST backend API",
                 version: "1.0.0",
                 description: "A simple REST backend API with JWT authentication using refresh token",
             },
@@ -49,4 +52,7 @@ if (process.env.NODE_ENV == "development") {
     app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 }
 
-export = app
+import http from 'http';
+
+const server = http.createServer(app);
+export = server;

@@ -1,9 +1,12 @@
-import app from './server'
+import server from './server'
 
-const port = process.env.port
+import {initSocketServer} from "./socket_server"
 
+initSocketServer(server)
 
-app.listen(port, () => {
-    console.log('app is running on port ' + port)
-});
+const PORT = process.env.PORT
+server.listen(PORT, () => {
+    console.log('server started on port ' + PORT)
+})
 
+export = server

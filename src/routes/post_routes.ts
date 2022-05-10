@@ -1,6 +1,6 @@
 import express from "express";
 import authenticate from "../common/auth_middleware";
-import Post from '../controllers/post';
+import {getAllPosts, getPostById, deletePostById, createNewPost} from '../controllers/post'
 
 const router = express.Router()
 /**
@@ -11,12 +11,12 @@ const router = express.Router()
  */
 
 
-router.get('/', Post.getAllPosts)
+router.get('/', getAllPosts)
 
-router.post('/', authenticate, Post.createNewPost)
+router.post('/', authenticate, createNewPost)
 
-router.get('/:id', Post.getPostById)
+router.get('/:id', getPostById)
 
-router.delete('/:id', authenticate, Post.DeletePostById)
+router.delete('/:id', authenticate, deletePostById)
 
 export = router

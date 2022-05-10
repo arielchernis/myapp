@@ -1,16 +1,25 @@
-import request from 'supertest'
-import app from '../server'
-import mongoose from 'mongoose'
-import Post from '../models/postmodel'
+import request from "supertest";
+import server from "../app"
+import mongoose from "mongoose";
+import Post from "../models/postmodel";
 import User from "../models/user_model";
+import {closeSocketServer} from "../socket_server"
 
-const message = "this is my message"
-let sender = "12345678"
+const message = "this is my test message";
+let sender = "";
 let retId = "";
 
-const email = "dori@hello.com";
-const password = "1234";
+const email = "posttest@a.com";
+const password = "1234567890";
 let accessToken = "";
+
+const serverCleanup = async () => {
+    return new Promise<void>((resolve) => {
+        server.close(() => {
+            resolve()
+        })
+    })
+}
 
 beforeAll(async () => {
     //clear Posts collection
@@ -21,12 +30,14 @@ beforeAll(async () => {
 afterAll(async () => {
     await Post.deleteMany({sender: sender});
     await User.deleteMany({email: email});
+    await closeSocketServer()
+    await serverCleanup()
     mongoose.connection.close();
 });
 
 describe("This is Post API test", () => {
     test("Test register to get access token", async () => {
-        const response = await request(app)
+        const response = await request(server)
             .post("/auth/register")
             .send({email: email, password: password});
         expect(response.statusCode).toEqual(200);
@@ -36,12 +47,12 @@ describe("This is Post API test", () => {
     });
 
     test("Test Post get API", async () => {
-        const response = await request(app).get("/post");
+        const response = await request(server).get("/post");
         expect(response.statusCode).toEqual(200);
     });
 
     test("Test Post post API", async () => {
-        const response = await request(app)
+        const response = await request(server)
             .post("/post")
             .set({authorization: "barer " + accessToken})
             .send({
@@ -60,7 +71,7 @@ describe("This is Post API test", () => {
     });
 
     test("Test get Post by id API", async () => {
-        const response = await request(app).get("/post/" + retId);
+        const response = await request(server).get("/post/" + retId);
         expect(response.statusCode).toEqual(200);
         const retMessage = response.body.message;
         const retSender = response.body.sender;
@@ -71,7 +82,7 @@ describe("This is Post API test", () => {
     });
 
     test("Test get Post by sender API", async () => {
-        const response = await request(app).get("/post?sender=" + sender);
+        const response = await request(server).get("/post?sender=" + sender);
         expect(response.statusCode).toEqual(200);
         const retMessage = response.body[0].message;
         const retSender = response.body[0].sender;
@@ -82,12 +93,12 @@ describe("This is Post API test", () => {
     });
 
     test("Test delete post by id API", async () => {
-        const response = await request(app)
+        const response = await request(server)
             .delete("/post/" + retId)
             .set({authorization: "barer " + accessToken});
         expect(response.statusCode).toEqual(200);
 
-        const response2 = await request(app).get("/post/" + retId);
+        const response2 = await request(server).get("/post/" + retId);
         expect(response2.statusCode).toEqual(400);
     });
 });
